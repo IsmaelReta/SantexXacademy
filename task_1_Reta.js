@@ -1,11 +1,5 @@
 /* 1) Realizar una funcion que reciba un numero y escriba una piramide desde 1 hasta ese
-numero de la siguiente forma:
-para valor 6
-1
-12
-123
-1234
-12356*/
+numero*/
 console.log("NUMBER 1")
 
 function pyramid(number){
@@ -39,28 +33,19 @@ console.log(pyramid())
 
 
 /* 2) Escribir una funcion que reciba 2 array y devuelva un array con todos los elementos
-que coinciden entre ellos
-Ejemplo:
-Array1: ['rojo', 'azul', 'amarillo']
-Array2: ['blanco', 'negro', 'rojo']
-Resultado: ['rojo']
-Ejemplo 2:
-Array1: [4, 3, true, 'manzana']
-Array2: ['pera', 3, f alse, true, 3, true]
-Resultado: [3, true] */
+que coinciden entre ellos*/
 console.log("NUMBER 2")
 
 let array1 = ['rojo', 'azul', 'amarillo']
 let array2 = ['blanco', 'negro', 'rojo']
 let array3 = [4, 3, true, 'manzana']
 let array4 = ['pera', 3, false, true, 3, true]
-
+/* outdated way
 function arraySeeker(arrayLeft, arrayRight){
     let results = []
     // removes duplicates
     arrayRight = [...new Set(arrayRight)]
     arrayLeft = [...new Set(arrayLeft)]
-    
     //iterates left array
     for (let counterLeft = 0; counterLeft < arrayLeft.length; counterLeft++) { 
         //iterates right array
@@ -73,8 +58,13 @@ function arraySeeker(arrayLeft, arrayRight){
         }
     }
     return results;
-}
+}*/
 
+function arraySeeker(arrayLeft, arrayRight) {
+    const setRight = new Set(arrayRight);
+    const results = arrayLeft.filter(element => setRight.has(element));
+    return [...new Set(results)];
+  }
 
 console.log(arraySeeker(array4,array3));
 console.log(arraySeeker(array1,array2));
@@ -104,4 +94,4 @@ carrito = {
 }*/
 
 /* 3.3)Agregar al ejercicio anterior una validación para no permitir duplicados e imprimir un mensaje si el
-item ya existe “ya existe xxx con yyy unidades”*/
+item ya existe “ya existe xxx con yyy unidades” ya existe el producto xxx*/
