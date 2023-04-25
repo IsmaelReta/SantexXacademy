@@ -63,35 +63,46 @@ function arraySeeker(arrayLeft, arrayRight){
 function arraySeeker(arrayLeft, arrayRight) {
     const setRight = new Set(arrayRight);
     const results = arrayLeft.filter(element => setRight.has(element));
-    return [...new Set(results)];
+    return [... new Set(results)];
   }
 
 console.log(arraySeeker(array4,array3));
 console.log(arraySeeker(array1,array2));
 
+
+console.log("NUMBER 3")
 /* 3)
 3.1) Dado el siguiente objeto
 let carrito = {
     montoTotal: 10,
     productos: ["Leche"]
 }
-
 Crear las clases necesarias para generar carritos respetando la estructura del objeto dado. */
+/* 3.2) Agregar un metodo a la clase que agregue un producto al carrito y actualice el montoTotal*/
+/* 3.3)Agregar al ejercicio anterior una validación para no permitir duplicados e imprimir un mensaje si el
+item ya existe ya existe el producto xxx*/
+class Cart {
+    constructor(amount, product){
+        this.amount = amount;
+        this.product = [product];
+    }
 
-/* 3.2) Agregar un metodo a la clase que agregue un producto al carrito y actualice el montoTotal
-agregarProducto(nombre, precio, unidades) {
-    // Completar aca...
+    addProduct(productName, price, amount){
+        let products = this.product
+        try {
+            if (this.product.includes(productName)){
+                throw new Error(`The product ${productName} already exist, sorry mate`);
+            }
+        } catch (error){
+            return error;
+        }
+        
+        this.amount += amount;
+        this.product.push(productName)
+    }
+    
 }
 
-
-Ej:
-agregarProducto("Azucar", 5, 2);
-
-//Resultado esperado
-carrito = {
-    montoTotal: 20,
-    productos: ["Leche", "Azucar"]
-}*/
-
-/* 3.3)Agregar al ejercicio anterior una validación para no permitir duplicados e imprimir un mensaje si el
-item ya existe “ya existe xxx con yyy unidades” ya existe el producto xxx*/
+const testCart = new Cart(5, "Meiloorun");
+testCart.addProduct("Porg", 11, 38);
+console.log(testCart);
