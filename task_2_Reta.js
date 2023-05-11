@@ -170,8 +170,18 @@ const carrito = new Carrito();
     await carrito.agregarProducto('KS944RUR', 2);
     await carrito.agregarProducto('325435', 2);
     console.log(carrito);
+    const promesa = carrito.eliminarProducto('KS944RUR', 1);
 
   })();
 
 
-  console.log(carrito);
+console.log(carrito);
+
+promesa
+    .then((success) => {
+        console.log(`Exito ${success}`)
+    })
+    .catch((error) => {
+        console.log(`Error ${error}`)
+    });
+
