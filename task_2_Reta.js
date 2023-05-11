@@ -119,14 +119,21 @@ class Carrito {
     }
     // funcion para eliminar producto
     async eliminarProducto(sku, cantidad){
+        //verifica que el producto exista en el carrito
         if (!(this.productos.some(producto => producto.sku === sku))) {
             throw new Error("Ese producto no existe en este carrito");
         }
+        // IF= elimina producto por completo; ELSE= reduce su cantidad
         let productIndex = this.productos.findIndex(producto => producto.sku === sku);
         if (this.productos[productIndex].cantidad <= cantidad){
+            let productoeliminado = productosDelSuper.findIndex(producto => producto.sku === sku);
+            let categoriaeliminado = productosDelSuper[productoeliminado].categoria;
             this.productos.splice(productIndex,1);
-            /*let productoeliminado = productosDelSuper.findIndex(producto => producto.sku === sku);
-            let categoriaeliminado = productosDelSuper[productoeliminado].categoria*/
+            //verifica que siga teniendo prodcutos en la categoria del producto eliminado
+            if ((this.categorias.some(categorias => categorias === categoriaeliminado))) {
+                let categoriaperdida = this.categorias.findIndex(categoria => categoria === categoriaeliminado);
+                this.categorias.splice(categoriaperdida,1);
+            }
 
         } else {
             this.productos[productIndex].cantidad -= cantidad;
@@ -183,5 +190,8 @@ promesa
     })
     .catch((error) => {
         console.log(`Error ${error}`)
+    })
+    .finally(()=>{
+        console.log(carrito)
     });
 
