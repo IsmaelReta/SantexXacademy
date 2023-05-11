@@ -130,7 +130,7 @@ class Carrito {
             let categoriaeliminado = productosDelSuper[productoeliminado].categoria;
             this.productos.splice(productIndex,1);
             //verifica que siga teniendo prodcutos en la categoria del producto eliminado
-            if ((this.categorias.some(categorias => categorias === categoriaeliminado))) {
+            if (!(this.productos.some(productos => productos.categoria === categoriaeliminado))) {
                 let categoriaperdida = this.categorias.findIndex(categoria => categoria === categoriaeliminado);
                 this.categorias.splice(categoriaperdida,1);
             }
