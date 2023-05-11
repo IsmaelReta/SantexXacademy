@@ -10,8 +10,10 @@ El código tiene errores y varias cosas para mejorar / agregar
 ​
 Ejercicios
 1) Arreglar errores existentes en el código
-    a) Al ejecutar agregarProducto 2 veces con los mismos valores debería agregar 1 solo producto con la suma de las cantidades.    
-    b) Al ejecutar agregarProducto debería actualizar la lista de categorías solamente si la categoría no estaba en la lista.
+    a) Al ejecutar agregarProducto 2 veces con los mismos valores debería
+        agregar 1 solo producto con la suma de las cantidades.    
+    b) Al ejecutar agregarProducto debería actualizar la lista de categorías
+        solamente si la categoría no estaba en la lista.
     c) Si intento agregar un producto que no existe debería mostrar un mensaje de error.
 ​
 2) Agregar la función eliminarProducto a la clase Carrito
@@ -85,15 +87,50 @@ class Carrito {
         console.log(`Agregando ${cantidad} ${sku}`);
 
         // Busco el producto en la "base de datos"
-        const producto = await findProductBySku(sku);
+        let producto = '';
+        try {
+            producto = await findProductBySku(sku);
+
+        } catch(error){
+            console.log(`Producto con codigo ${sku} no encontrado`)
+            return error;
+        }
 
         console.log("Producto encontrado", producto);
 
         // Creo un producto nuevo
         const nuevoProducto = new ProductoEnCarrito(sku, producto.nombre, cantidad);
-        this.productos.push(nuevoProducto);
+
+        // verifica que no se repita un producto. IF = repetido; Else = no repetido
+        if (this.productos.some(producto => producto.sku === nuevoProducto.sku)) {
+            let productIndex = this.productos.findIndex(producto => producto.sku === nuevoProducto.sku);
+            this.productos[productIndex].cantidad += cantidad;
+        } else {
+            this.productos.push(nuevoProducto);
+        }
+
         this.precioTotal = this.precioTotal + (producto.precio * cantidad);
-        this.categorias.push(producto.categoria);
+
+        // verifica que no se repita una categoria. IF = no repetido
+        if (!(this.categorias.some(categorias => categorias === producto.categoria))) {
+            this.categorias.push(producto.categoria);
+        }
+        
+    }
+    // funcion para eliminar producto
+    async eliminarProducto(sku, cantidad){
+        if (!(this.productos.some(producto => producto.sku === sku))) {
+            throw new Error("Ese producto no existe en este carrito");
+        }
+        let productIndex = this.productos.findIndex(producto => producto.sku === sku);
+        if (this.productos[productIndex].cantidad <= cantidad){
+            this.productos.splice(productIndex,1);
+            /*let productoeliminado = productosDelSuper.findIndex(producto => producto.sku === sku);
+            let categoriaeliminado = productosDelSuper[productoeliminado].categoria*/
+
+        } else {
+            this.productos[productIndex].cantidad -= cantidad;
+        }
     }
 }
 
@@ -121,9 +158,20 @@ function findProductBySku(sku) {
             } else {
                 reject(`Product ${sku} not found`);
             }
-        }, 1500);
+        }, 500);
     });
 }
 
 const carrito = new Carrito();
-carrito.agregarProducto('WE328NJ', 2);
+
+(async () => {
+    await carrito.agregarProducto('WE328NJ', 2);
+    await carrito.agregarProducto('KS944RUR', 2);
+    await carrito.agregarProducto('KS944RUR', 2);
+    await carrito.agregarProducto('325435', 2);
+    console.log(carrito);
+
+  })();
+
+
+  console.log(carrito);
